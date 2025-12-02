@@ -1,5 +1,4 @@
-
-function Home(){
+function Home() {
   const ingredients = [
     "1 xícara (chá) de chocolate em pó açúcar",
     "1 xícara (chá) de açúcar",
@@ -7,7 +6,7 @@ function Home(){
     "1 xícara (chá) de óleo",
     "1 xícara (chá) de leite",
     "2 ovos de galinha(até hoje só fiz com esses)",
-    "1 colher (sopa) de fermento em pó"
+    "1 colher (sopa) de fermento em pó",
   ];
 
   const howToMake = [
@@ -21,47 +20,40 @@ function Home(){
     "Despeje a massa na forma",
     "Leve ao forno por cerca de 30 minutos",
     "Após isso espete com uma faca, se sair limpa ou umida está pronto, se sair com macinha ,mais 5 minutos",
-    "Espere esfriar antes de desenformar"
+    "Espere esfriar antes de desenformar",
   ];
 
   const optional = [
     "Derreta uma barra de chocolate meio-amargo no microondas(30 segundos) mecha muito bem",
     "Se não derreter faça o mesmo processo de 15 em 15 segundos(cuidado que mais que uma vez pode queimar o chocolate)",
-    "misture meio creme de leite, e voilà jogue em cima do bolo com confetti ou granulado"
-  ]
-  
+    "misture meio creme de leite, e voilà jogue em cima do bolo com confetti ou granulado",
+  ];
 
   return (
     <>
       <h1>Receita de bolo de chocolate do Padeiro da Ti</h1>
-      <pre style={{ width: 400, lineHeight: 1.4, whiteSpace: 'pre-wrap' }}>
+      <pre style={{ width: 400, lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
         {`Ingredientes:`}
         <ul>
           {ingredients.map((ingredient) => (
-          <li>
-            {ingredient}
-          </li>
+            <li>{ingredient}</li>
           ))}
         </ul>
         {`Modo de preparo:`}
         <ul>
           {howToMake.map((step) => (
-          <li>
-            {step}
-          </li>
+            <li>{step}</li>
           ))}
         </ul>
         {`Cobertura, mas é opcional:`}
         <ul>
           {optional.map((step) => (
-          <li>
-            {step}
-          </li>
+            <li>{step}</li>
           ))}
         </ul>
       </pre>
     </>
-  )
+  );
 }
 
 export default Home;
