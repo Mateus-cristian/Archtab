@@ -35,20 +35,20 @@ function Home() {
       <pre style={{ width: 400, lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
         {`Ingredientes:`}
         <ul>
-          {ingredients.map((ingredient) => (
-            <li>{ingredient}</li>
+          {ingredients.map((ingredient, index) => (
+            <li key={index}>{ingredient}</li>
           ))}
         </ul>
         {`Modo de preparo:`}
         <ul>
-          {howToMake.map((step) => (
-            <li>{step}</li>
+          {howToMake.map((step, index) => (
+            <li key={index}>{step}</li>
           ))}
         </ul>
         {`Cobertura, mas é opcional:`}
         <ul>
-          {optional.map((step) => (
-            <li>{step}</li>
+          {optional.map((step, index) => (
+            <li key={index}>{step}</li>
           ))}
         </ul>
       </pre>
