@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "extends": ["next/core-web-vitals"],
+  "overrides": [
+    {
+      "files": ["tests/**/*.js"],
+      "plugins": ["jest"],
+      "extends": ["plugin:jest/recommended"],
+      "env": {
+        "jest": true,
+        "node": true
+      }
+    },
+    {
+      "files": ["jest.config.js", "jest.setup.js"],
+      "env": {
+        "node": true
+      }
+    },
+    {
+      "files": ["infra/**/*.js"],
+      "env": {
+        "node": true
+      }
+    }
+  ]
+}
