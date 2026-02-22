@@ -1,6 +1,6 @@
 function Home() {
   const ingredients = [
-    "1 xícara (chá) de chocolate em pó açúcar",
+    "1 xícara (chá) de chocolate em pó",
     "1 xícara (chá) de açúcar",
     "2 xícaras (chá) de trigo",
     "1 xícara (chá) de óleo",
