@@ -28,6 +28,12 @@ describe("GET /api/v1/user", () => {
 
       const responseBody = await response.json();
 
+      const cacheControl = response.headers.get("Cache-Control");
+
+      expect(cacheControl).toBe(
+        "no-store, no-cache, max-age=0, must-revalidate",
+      );
+
       expect(responseBody).toEqual({
         id: createdUser.id,
         username: "UserWithValidSession",
