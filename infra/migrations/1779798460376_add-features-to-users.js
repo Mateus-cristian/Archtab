@@ -1,12 +1,11 @@
 exports.up = (pgm) => {
   pgm.addColumn("users", {
-    features:{
+    features: {
       type: "varchar[]",
       notNull: true,
-      default: "{}"
-    }
-  })
+      default: "{}",
+    },
+  });
 };
 
-
-exports.down = (pgm) => false;
+exports.down = () => false;
