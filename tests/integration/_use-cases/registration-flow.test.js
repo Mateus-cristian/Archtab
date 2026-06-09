@@ -1,5 +1,6 @@
 import webserver from "infra/webserver";
 import activation from "models/activation";
+import user from "models/user";
 import orchestrator from "tests/orchestrator";
 
 beforeAll(async () => {
@@ -11,6 +12,7 @@ beforeAll(async () => {
 
 describe("Use case: Registration Flow (all successful)", () => {
   let createUserResponseBody;
+  let activationTokenId;
   test("Create user account", async () => {
     const response = await fetch("http://localhost:3000/api/v1/users", {
       method: "POST",
@@ -47,20 +49,38 @@ describe("Use case: Registration Flow (all successful)", () => {
     expect(lastEmail.subject).toBe("Ative seu cadastro no Archtab!");
     expect(lastEmail.text).toContain("mateuscristian");
 
-    const activationToken = await orchestrator.extractUUID(lastEmail.text);
+    activationTokenId = await orchestrator.extractUUID(lastEmail.text);
 
     expect(lastEmail.text).toContain(
-      `${webserver.origin}/cadastro/ativar/${activationToken}`,
+      `${webserver.origin}/cadastro/ativar/${activationTokenId}`,
     );
 
     const activationTokenObject =
-      await activation.findOneValidByToken(activationToken);
+      await activation.findOneValidByToken(activationTokenId);
 
     expect(activationTokenObject.user_id).toBe(createUserResponseBody.id);
     expect(activationTokenObject.used_at).toBe(null);
   });
 
-  test("Activate account", async () => {});
+  test("Activate account", async () => {
+    const response = await fetch(
+      `http://localhost:3000/api/v1/activations/${activationTokenId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    expect(response.status).toBe(200);
+
+    const responseActivationBody = await response.json();
+    expect(Date.parse(responseActivationBody.used_at)).not.toBeNaN();
+
+    const activedUser = await user.findOneById(responseActivationBody.user_id);
+    expect(activedUser.features).toEqual(["create:session"]);
+  });
 
   test.todo("Login");
 
