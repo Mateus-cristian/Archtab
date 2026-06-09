@@ -1,5 +1,6 @@
 import database from "infra/database";
 import email from "infra/email";
+import { NotFoundError } from "infra/errors";
 import webserver from "infra/webserver";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000; // 15 min
@@ -27,22 +28,35 @@ async function create(userId) {
   }
 }
 
-async function findOneByUserId(userId) {
-  const newToken = await runInsertQuery(userId);
-  return newToken;
+async function findOneValidByToken(activationToken) {
+  const activationFound = await runInsertQuery(activationToken);
 
-  async function runInsertQuery(userId) {
+  return activationFound;
+
+  async function runInsertQuery(activationToken) {
     const results = await database.query({
       text: `
-          SELECT 
+          SELECT
             *
           FROM
             user_activation_tokens
           WHERE
-            user_id = ($1)
-          ;`,
-      values: [userId],
+            id = $1
+            AND expires_at > NOW()
+            AND used_at IS null
+          LIMIT
+            1
+      `,
+      values: [activationToken],
     });
+
+    if (results.rowCount === 0) {
+      throw new NotFoundError({
+        message:
+          "O token de ativação utilizado não foi encontrado no sistema ou expirou.",
+        action: "Faça um novo cadastro.",
+      });
+    }
 
     return results.rows[0];
   }
@@ -65,7 +79,7 @@ Equipe Archtab
 
 const activation = {
   create,
-  findOneByUserId,
+  findOneValidByToken,
   sendEmailToUser,
 };
 
