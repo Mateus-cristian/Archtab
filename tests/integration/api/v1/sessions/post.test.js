@@ -38,7 +38,6 @@ describe("POST /api/v1/sessions", () => {
         status_code: 401,
       });
     });
-
     test("With correct `email` but incorrect `password`", async () => {
       await orchestrator.createUser({
         email: "mateus@curso.dev",
@@ -66,7 +65,6 @@ describe("POST /api/v1/sessions", () => {
         status_code: 401,
       });
     });
-
     test("With incorrect `email` and incorrect `password`", async () => {
       await orchestrator.createUser();
 
@@ -92,11 +90,43 @@ describe("POST /api/v1/sessions", () => {
         status_code: 401,
       });
     });
-    test("Wih correct `email` and correct `password`", async () => {
+
+    test("With correct `email` and correct `password`, but inactive user", async () => {
+      await orchestrator.createUser({
+        email: "email-inativo@curso.dev",
+        password: "senhacorreta",
+      });
+
+      const response = await fetch("http://localhost:3000/api/v1/sessions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "email-inativo@curso.dev",
+          password: "senhacorreta",
+        }),
+      });
+
+      expect(response.status).toBe(403);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toEqual({
+        name: "ForbbidenError",
+        message: "Você não possui permissão para fazer login.",
+        action: "Contate suporte se você acredita que é um erro.",
+        status_code: 403,
+      });
+    });
+
+    test("With correct `email` and correct `password`", async () => {
       const createdUser = await orchestrator.createUser({
         email: "email-correto@curso.dev",
         password: "senhacorreta",
       });
+
+      await orchestrator.activateUser(createdUser.id)
 
       const response = await fetch("http://localhost:3000/api/v1/sessions", {
         method: "POST",

@@ -1,5 +1,7 @@
 import controller from "infra/controller";
+import { ForbbidenError } from "infra/errors";
 import authentication from "models/authentication";
+import authorization from "models/authorization";
 import session from "models/session";
 
 import { createRouter } from "next-connect";
@@ -19,6 +21,14 @@ async function postHandler(request, response) {
     userInputValues.email,
     userInputValues.password,
   );
+
+  if(!authorization.can(authenticatedUser, "create:session")){
+    throw new ForbbidenError({
+      message: "Você não possui permissão para fazer login.",
+      action: "Contate suporte se você acredita que é um erro."
+    })
+  }
+ 
 
   const newSession = await session.create(authenticatedUser.id);
   controller.setSessionCookie(newSession.token, response);
