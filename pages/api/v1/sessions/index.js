@@ -22,13 +22,12 @@ async function postHandler(request, response) {
     userInputValues.password,
   );
 
-  if(!authorization.can(authenticatedUser, "create:session")){
+  if (!authorization.can(authenticatedUser, "create:session")) {
     throw new ForbbidenError({
       message: "Você não possui permissão para fazer login.",
-      action: "Contate suporte se você acredita que é um erro."
-    })
+      action: "Contate suporte se você acredita que é um erro.",
+    });
   }
- 
 
   const newSession = await session.create(authenticatedUser.id);
   controller.setSessionCookie(newSession.token, response);

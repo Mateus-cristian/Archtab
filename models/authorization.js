@@ -1,14 +1,13 @@
 function can(user, feature) {
-  if(user.features.includes(feature)){
-    return true
+  if (user.features.includes(feature)) {
+    return true;
   }
 
-  return false
+  return false;
 }
-
 
 const authorization = {
-  can
-}
+  can,
+};
 
 export default authorization;
