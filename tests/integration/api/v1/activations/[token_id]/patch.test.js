@@ -142,6 +142,7 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
         "create:session",
         "read:session",
         "update:user",
+        "read:status",
       ]);
       expect(activatedUser.updated_at > createdUser.updated_at).toBe(true);
 

@@ -1,5 +1,6 @@
 import controller from "infra/controller";
 import activation from "models/activation";
+import authorization from "models/authorization";
 import { createRouter } from "next-connect";
 
 const router = createRouter();
@@ -21,5 +22,11 @@ async function patchHandler(request, response) {
     validActivationToken.id,
   );
 
-  response.status(200).json(usedActivationToken);
+  const securityOutputValues = authorization.filterOutput(
+    validActivationToken,
+    "read:activation_token",
+    usedActivationToken,
+  );
+
+  response.status(200).json(securityOutputValues);
 }

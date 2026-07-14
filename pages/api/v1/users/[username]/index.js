@@ -13,18 +13,26 @@ router.patch(controller.canRequest("update:user"), patchHandler);
 export default router.handler(controller.errorHandlers);
 
 async function getHandler(request, response) {
+  const userTryingToGet = request.context.user;
   const username = request.query.username;
   const userFound = await user.findOneByUsername(username);
-  response.status(200).json(userFound);
+
+  const securityOutputValues = authorization.filterOutput(
+    userTryingToGet,
+    "read:user",
+    userFound,
+  );
+
+  response.status(200).json(securityOutputValues);
 }
 
 async function patchHandler(request, response) {
   const username = request.query.username;
   const userInputValues = request.body;
   const resource = await user.findOneByUsername(username);
-  const authenticatedUser = request.context.user;
+  const userTryingToPatch = request.context.user;
 
-  if (!authorization.can(authenticatedUser, "update:user", resource)) {
+  if (!authorization.can(userTryingToPatch, "update:user", resource)) {
     throw new ForbbidenError({
       message: "Você não possui permissão para fazer update.",
       action: "Contate suporte se você acredita que é um erro.",
@@ -32,5 +40,11 @@ async function patchHandler(request, response) {
   }
 
   const updatedUser = await user.update(username, userInputValues);
-  response.status(200).json(updatedUser);
+  const securityOutputValues = authorization.filterOutput(
+    userTryingToPatch,
+    "read:user",
+    updatedUser,
+  );
+
+  response.status(200).json(securityOutputValues);
 }

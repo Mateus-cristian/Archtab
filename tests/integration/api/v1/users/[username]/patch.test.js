@@ -199,9 +199,12 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: responseBody.id,
         username: "uniqueUser2",
-        email: responseBody.email,
-        features: ["create:session", "read:session", "update:user"],
-        password: responseBody.password,
+        features: [
+          "create:session",
+          "read:session",
+          "update:user",
+          "read:status",
+        ],
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -240,9 +243,12 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: responseBody.id,
         username: activatedUser.username,
-        email: "uniqueEmail2.novo@curso.dev",
-        features: ["create:session", "read:session", "update:user"],
-        password: responseBody.password,
+        features: [
+          "create:session",
+          "read:session",
+          "update:user",
+          "read:status",
+        ],
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -281,9 +287,12 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: responseBody.id,
         username: activatedUser.username,
-        email: activatedUser.email,
-        features: ["create:session", "read:session", "update:user"],
-        password: responseBody.password,
+        features: [
+          "create:session",
+          "read:session",
+          "update:user",
+          "read:status",
+        ],
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -353,9 +362,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: targetUser.id,
         username: targetUser.username,
-        email: "updated.default@curso.dev",
         features: targetUser.features,
-        password: targetUser.password,
         created_at: targetUser.created_at.toISOString(),
         updated_at: responseBody.updated_at,
       });
