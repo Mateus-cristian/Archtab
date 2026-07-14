@@ -12,6 +12,7 @@ export default router.handler(controller.errorHandlers);
 
 async function patchHandler(request, response) {
   const activationTokenId = request.query.token_id;
+  const userTryingToPatch = request.context.user;
 
   const validActivationToken =
     await activation.findOneValidByToken(activationTokenId);
@@ -23,7 +24,7 @@ async function patchHandler(request, response) {
   );
 
   const securityOutputValues = authorization.filterOutput(
-    validActivationToken,
+    userTryingToPatch,
     "read:activation_token",
     usedActivationToken,
   );
