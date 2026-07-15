@@ -34,7 +34,7 @@ function UpdatedAt({ updatedAt }) {
 function DatabaseStatus({ database }) {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <span>Versão: {database.version}</span>
+      {database.version && <span>Versão: {database.version}</span>}
       <span>Conexões abertas: {database.open_connections}</span>
       <span>Conexões máximas: {database.max_connections}</span>
     </div>
