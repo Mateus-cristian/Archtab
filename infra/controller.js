@@ -35,6 +35,8 @@ function onErrorHandler(error, request, response) {
     cause: error,
   });
 
+  console.error(publicErrorObject);
+
   response.status(publicErrorObject.statusCode).json(publicErrorObject);
 }
 
