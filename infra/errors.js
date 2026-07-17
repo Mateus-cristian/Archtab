@@ -35,7 +35,7 @@ export class ServiceError extends Error {
       message: this.message,
       action: this.action,
       status_code: this.statusCode,
-      context: this.context
+      context: this.context,
     };
   }
 }
