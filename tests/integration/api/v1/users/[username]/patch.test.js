@@ -33,7 +33,7 @@ describe("PATCH /api/v1/users/[username]", () => {
   });
 
   describe("Default user", () => {
-    (test("With noneexistent 'username'", async () => {
+    (test("With noneexistent `username`", async () => {
       const activatedUser = await orchestrator.createActivatedUser();
 
       const sessionObject = await orchestrator.createSession(activatedUser.id);
@@ -97,7 +97,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         });
       }));
 
-    test("With duplicated 'email'", async () => {
+    test("With duplicated `email`", async () => {
       await orchestrator.createUser({
         email: "email1.novo@curso.dev",
       });
@@ -134,7 +134,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
     });
 
-    test("With `user2` targeting 'user1'", async () => {
+    test("With `user2` targeting `user1`", async () => {
       const user1 = await orchestrator.createUser({
         email: "email1updated.novo@curso.dev",
       });
@@ -171,7 +171,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
     });
 
-    test("With unique 'username'", async () => {
+    test("With unique `username`", async () => {
       const activatedUser = await orchestrator.createActivatedUser({
         username: "uniqueUser1",
       });
@@ -215,7 +215,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody.updated_at > responseBody.created_at).toBe(true);
     });
 
-    test("With unique 'email'", async () => {
+    test("With unique `email`", async () => {
       const activatedUser = await orchestrator.createActivatedUser({
         email: "uniqueEmail1.novo@curso.dev",
       });
@@ -259,7 +259,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody.updated_at > responseBody.created_at).toBe(true);
     });
 
-    test("With new 'password'", async () => {
+    test("With new `password`", async () => {
       const activatedUser = await orchestrator.createActivatedUser({
         password: "newPassword1",
       });
