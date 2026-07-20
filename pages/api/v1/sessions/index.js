@@ -38,7 +38,7 @@ async function postHandler(request, response) {
     newSession,
   );
 
-  response.status(201).json(securityOutputValues);
+  return response.status(201).json(securityOutputValues);
 }
 
 async function deleteHandler(request, response) {

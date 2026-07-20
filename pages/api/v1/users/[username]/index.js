@@ -23,7 +23,7 @@ async function getHandler(request, response) {
     userFound,
   );
 
-  response.status(200).json(securityOutputValues);
+  return response.status(200).json(securityOutputValues);
 }
 
 async function patchHandler(request, response) {
@@ -46,5 +46,5 @@ async function patchHandler(request, response) {
     updatedUser,
   );
 
-  response.status(200).json(securityOutputValues);
+  return response.status(200).json(securityOutputValues);
 }
