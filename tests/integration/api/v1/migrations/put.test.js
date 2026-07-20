@@ -1,3 +1,4 @@
+import webserver from "infra/webserver";
 import orchestrator from "tests/orchestrator";
 
 beforeAll(async () => {
@@ -8,7 +9,7 @@ beforeAll(async () => {
 describe("PUT /api/v1/migrations", () => {
   describe("Anonymous user", () => {
     test("Error method not allowed", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/migrations", {
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         method: "PUT",
       });
 

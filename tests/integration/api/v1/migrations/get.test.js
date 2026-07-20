@@ -1,3 +1,4 @@
+import webserver from "infra/webserver";
 import orchestrator from "tests/orchestrator";
 
 beforeAll(async () => {
@@ -11,7 +12,7 @@ beforeEach(async () => {
 describe("GET /api/v1/migrations", () => {
   describe("Anonymous user", () => {
     test("Without `read:migration` feature", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/migrations");
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`);
 
       expect(response.status).toBe(403);
 
@@ -32,7 +33,7 @@ describe("GET /api/v1/migrations", () => {
       const defaultUser = await orchestrator.createActivatedUser();
       const sessionObject = await orchestrator.createSession(defaultUser.id);
 
-      const response = await fetch("http://localhost:3000/api/v1/migrations", {
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
@@ -63,7 +64,7 @@ describe("GET /api/v1/migrations", () => {
         adminUserWithFeatures.id,
       );
 
-      const response = await fetch("http://localhost:3000/api/v1/migrations", {
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },

@@ -1,3 +1,4 @@
+import webserver from "infra/webserver";
 import orchestrator from "tests/orchestrator";
 
 beforeAll(async () => {
@@ -8,7 +9,7 @@ beforeAll(async () => {
 describe("GET /api/v1/status", () => {
   describe("Anonymous user", () => {
     test("Retriving current system status", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/status");
+      const response = await fetch(`${webserver.origin}/api/v1/status`);
 
       const responseBody = await response.json();
       const parseUpdatedAt = new Date(responseBody.updated_at).toISOString();
@@ -34,7 +35,7 @@ describe("GET /api/v1/status", () => {
         adminUserWithFeatures.id,
       );
 
-      const response = await fetch("http://localhost:3000/api/v1/status", {
+      const response = await fetch(`${webserver.origin}/api/v1/status`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
