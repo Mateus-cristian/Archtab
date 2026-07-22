@@ -112,6 +112,7 @@ describe("DELETE /api/v1/sessions", () => {
         value: "invalid",
         maxAge: -1,
         path: "/",
+        sameSite: "Lax",
         httpOnly: true,
       });
 
