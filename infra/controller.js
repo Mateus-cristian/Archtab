@@ -41,19 +41,25 @@ function onErrorHandler(error, request, response) {
 }
 
 function setSessionCookie(sessionToken, response) {
-  const setCookie = cookie.serialize("session_id", sessionToken, {
+  const setCookie = cookie.stringifySetCookie({
+    name: "session_id",
+    value: String(sessionToken),
     path: "/",
     maxAge: session.EXPIRATION_IN_MILLISECONDS / 1000,
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
-    SameSite: "Lax",
+    sameSite: "Lax",
   });
+  console.log("setCookie")
+  console.log(setCookie)
 
   response.setHeader("Set-Cookie", setCookie);
 }
 
 function clearSessionCookie(response) {
-  const setCookie = cookie.serialize("session_id", "invalid", {
+  const setCookie = cookie.stringifySetCookie({
+    name: "session_id",
+    value: "invalid",
     path: "/",
     maxAge: -1,
     secure: process.env.NODE_ENV === "production",

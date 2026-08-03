@@ -108,7 +108,7 @@ describe("Use case: Registration Flow (all successful)", () => {
     expect(createSessionResponseBody.user_id).toBe(createUserResponseBody.id);
   });
 
-  test("Get user information", async () => {
+  test("Get user information", async () => {    
     const userResponse = await fetch(`${webserver.origin}/api/v1/user`, {
       headers: {
         Cookie: `session_id=${createSessionResponseBody.token}`,
