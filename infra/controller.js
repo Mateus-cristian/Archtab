@@ -50,8 +50,6 @@ function setSessionCookie(sessionToken, response) {
     httpOnly: true,
     sameSite: "Lax",
   });
-  console.log("setCookie")
-  console.log(setCookie)
 
   response.setHeader("Set-Cookie", setCookie);
 }
