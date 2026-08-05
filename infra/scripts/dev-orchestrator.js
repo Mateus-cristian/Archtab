@@ -1,4 +1,3 @@
-/* eslint-env node, es2021 */
 const { spawn } = require("node:child_process");
 
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
