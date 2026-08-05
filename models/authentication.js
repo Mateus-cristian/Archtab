@@ -2,7 +2,7 @@ import { NotFoundError, UnauthorizedError } from "infra/errors";
 import password from "models/password";
 import user from "models/user.js";
 
-async function getAuthenticateUser(providedEmail, providedPassword) {
+async function getUser(providedEmail, providedPassword) {
   try {
     const storedUser = await findUserByEmail(providedEmail);
     await validatePassword(providedPassword, storedUser.password);
@@ -52,7 +52,7 @@ async function getAuthenticateUser(providedEmail, providedPassword) {
 }
 
 const authentication = {
-  getAuthenticateUser,
+  getUser,
 };
 
 export default authentication;

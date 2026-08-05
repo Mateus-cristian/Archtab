@@ -1,3 +1,4 @@
+import webserver from "infra/webserver";
 import session from "models/session";
 import setCookieParser from "set-cookie-parser";
 import orchestrator from "tests/orchestrator";
@@ -12,7 +13,7 @@ beforeAll(async () => {
 describe("GET /api/v1/user", () => {
   (describe("Anonymous user", () => {
     test("Retriving the endpoint", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/user");
+      const response = await fetch(`${webserver.origin}/api/v1/user`);
 
       expect(response.status).toBe(403);
 
@@ -35,7 +36,7 @@ describe("GET /api/v1/user", () => {
         const activatedUser = await orchestrator.activateUser(createdUser.id);
         const sessionObject = await orchestrator.createSession(createdUser.id);
 
-        const response = await fetch("http://localhost:3000/api/v1/user", {
+        const response = await fetch(`${webserver.origin}/api/v1/user`, {
           headers: {
             Cookie: `session_id=${sessionObject.token}`,
           },
@@ -92,6 +93,7 @@ describe("GET /api/v1/user", () => {
           maxAge: session.EXPIRATION_IN_MILLISECONDS / 1000,
           path: "/",
           httpOnly: true,
+          sameSite: "Lax",
         });
       });
 
@@ -99,7 +101,7 @@ describe("GET /api/v1/user", () => {
         const nonexistentToken =
           "636a6ac5ee119582607d08fbbccb1bf61374fccc6d52ff6a07baa28ebc9d895e46d65eaf8f9f01ebc2f70269db54033c";
 
-        const response = await fetch("http://localhost:3000/api/v1/user", {
+        const response = await fetch(`${webserver.origin}/api/v1/user`, {
           headers: {
             Cookie: `session_id=${nonexistentToken}`,
           },
@@ -130,7 +132,7 @@ describe("GET /api/v1/user", () => {
 
         jest.useRealTimers();
 
-        const response = await fetch("http://localhost:3000/api/v1/user", {
+        const response = await fetch(`${webserver.origin}/api/v1/user`, {
           headers: {
             Cookie: `session_id=${sessionObject.token}`,
           },
@@ -161,7 +163,7 @@ describe("GET /api/v1/user", () => {
 
         jest.useRealTimers();
 
-        const response = await fetch("http://localhost:3000/api/v1/user", {
+        const response = await fetch(`${webserver.origin}/api/v1/user`, {
           headers: {
             Cookie: `session_id=${sessionObject.token}`,
           },
@@ -212,6 +214,7 @@ describe("GET /api/v1/user", () => {
           maxAge: session.EXPIRATION_IN_MILLISECONDS / 1000,
           path: "/",
           httpOnly: true,
+          sameSite: "Lax",
         });
       });
     }));

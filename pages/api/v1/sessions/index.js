@@ -6,18 +6,16 @@ import session from "models/session";
 
 import { createRouter } from "next-connect";
 
-const router = createRouter();
-
-router.use(controller.injectAnonymousOrUser);
-router.post(controller.canRequest("create:session"), postHandler);
-router.delete(deleteHandler);
-
-export default router.handler(controller.errorHandlers);
+export default createRouter()
+  .use(controller.injectAnonymousOrUser)
+  .post(controller.canRequest("create:session"), postHandler)
+  .delete(deleteHandler)
+  .handler(controller.errorHandlers);
 
 async function postHandler(request, response) {
   const userInputValues = request.body;
 
-  const authenticatedUser = await authentication.getAuthenticateUser(
+  const authenticatedUser = await authentication.getUser(
     userInputValues.email,
     userInputValues.password,
   );
@@ -38,7 +36,7 @@ async function postHandler(request, response) {
     newSession,
   );
 
-  response.status(201).json(securityOutputValues);
+  return response.status(201).json(securityOutputValues);
 }
 
 async function deleteHandler(request, response) {
