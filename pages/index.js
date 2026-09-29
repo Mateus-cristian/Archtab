@@ -1,3 +1,5 @@
+import DefaultLayout from "interface/DefaultLayout";
+
 function Home() {
   const ingredients = [
     "1 xícara (chá) de chocolate em pó",
@@ -31,27 +33,34 @@ function Home() {
 
   return (
     <>
-      <h1>Receita de bolo de chocolate do Padeiro da Ti</h1>
-      <pre style={{ width: 400, lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
-        {`Ingredientes:`}
-        <ul>
-          {ingredients.map((ingredient, index) => (
-            <li key={index}>{ingredient}</li>
-          ))}
-        </ul>
-        {`Modo de preparo:`}
-        <ul>
-          {howToMake.map((step, index) => (
-            <li key={index}>{step}</li>
-          ))}
-        </ul>
-        {`Cobertura, mas é opcional:`}
-        <ul>
-          {optional.map((step, index) => (
-            <li key={index}>{step}</li>
-          ))}
-        </ul>
-      </pre>
+      <DefaultLayout
+        metadata={{
+          description:
+            "Compartilhe hoje seus conhecimentos com arquitetos e engenheiros.",
+        }}
+      >
+        <h1>Receita de bolo de chocolate do Padeiro da Ti</h1>
+        <pre style={{ width: 400, lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
+          {`Ingredientes:`}
+          <ul>
+            {ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
+          </ul>
+          {`Modo de preparo:`}
+          <ul>
+            {howToMake.map((step, index) => (
+              <li key={index}>{step}</li>
+            ))}
+          </ul>
+          {`Cobertura, mas é opcional:`}
+          <ul>
+            {optional.map((step, index) => (
+              <li key={index}>{step}</li>
+            ))}
+          </ul>
+        </pre>
+      </DefaultLayout>
     </>
   );
 }
