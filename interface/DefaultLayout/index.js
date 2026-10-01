@@ -1,6 +1,18 @@
 import { PageLayout, Header, Text } from "@primer/react";
 import Head from "next/head";
-export default function DefaultLayout({ children, metadata = {} }) {
+import styles from "./index.module.css";
+
+const contentWidthClasses = {
+  small: styles.smallContent,
+};
+
+export default function DefaultLayout({
+  children,
+  metadata = {},
+  contentWitdh,
+}) {
+  const extraContentClassName = contentWidthClasses[contentWitdh];
+
   return (
     <>
       <Head>
@@ -28,7 +40,13 @@ export default function DefaultLayout({ children, metadata = {} }) {
           </Header>
         </PageLayout.Header>
 
-        <PageLayout.Content padding="normal">{children}</PageLayout.Content>
+        <PageLayout.Content
+          className={extraContentClassName}
+          padding="normal"
+          width={contentWitdh}
+        >
+          {children}
+        </PageLayout.Content>
         <PageLayout.Footer divider="line" padding="normal">
           <Text size="small">© {new Date().getFullYear()} Archtab</Text>
         </PageLayout.Footer>
