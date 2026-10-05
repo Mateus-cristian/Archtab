@@ -72,32 +72,70 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
       expect(userInDatabase.features).toEqual(["read:activation_token"]);
     });
 
-    test("With already used activation token", async () => {
-      const createdUser = await orchestrator.createUser();
+    test("With an activation token used by a previous request", async () => {
+      const createdUser = await orchestrator.createUser({
+        username: "IdempotentActivation",
+      });
       const activationToken = await activation.create(createdUser.id);
-      await activation.markTokenAsUsed(activationToken.id);
 
-      const response = await fetch(
+      const firstResponse = await fetch(
         `${webserver.origin}/api/v1/activations/${activationToken.id}`,
         {
           method: "PATCH",
         },
       );
+      const firstResponseBody = await firstResponse.json();
+      const userAfterFirstRequest = await user.findOneById(createdUser.id);
 
-      expect(response.status).toBe(404);
+      const repeatedResponse = await fetch(
+        `${webserver.origin}/api/v1/activations/${activationToken.id}`,
+        {
+          method: "PATCH",
+        },
+      );
+      const repeatedResponseBody = await repeatedResponse.json();
 
-      const responseBody = await response.json();
-
-      expect(responseBody).toEqual({
-        name: "NotFoundError",
-        message:
-          "O token de ativação utilizado não foi encontrado no sistema ou expirou.",
-        action: "Faça um novo cadastro.",
-        status_code: 404,
-      });
+      expect(firstResponse.status).toBe(200);
+      expect(repeatedResponse.status).toBe(200);
+      expect(repeatedResponseBody).toEqual(firstResponseBody);
 
       const userInDatabase = await user.findOneById(createdUser.id);
-      expect(userInDatabase.features).toEqual(["read:activation_token"]);
+      expect(userInDatabase.features).toEqual([
+        "create:session",
+        "read:session",
+        "update:user",
+        "read:status",
+      ]);
+      expect(userInDatabase.updated_at).toEqual(
+        userAfterFirstRequest.updated_at,
+      );
+    });
+
+    test("With simultaneous requests using the same activation token", async () => {
+      const createdUser = await orchestrator.createUser({
+        username: "SimultaneousActivation",
+      });
+      const activationToken = await activation.create(createdUser.id);
+      const activationUrl = `${webserver.origin}/api/v1/activations/${activationToken.id}`;
+
+      const responses = await Promise.all([
+        fetch(activationUrl, { method: "PATCH" }),
+        fetch(activationUrl, { method: "PATCH" }),
+      ]);
+      const responseBodies = await Promise.all(
+        responses.map((response) => response.json()),
+      );
+
+      expect(responses.map((response) => response.status)).toEqual([200, 200]);
+      expect(responseBodies[1]).toEqual(responseBodies[0]);
+
+      const userInDatabase = await user.findOneById(createdUser.id);
+      expect(userInDatabase.features).toEqual([
+        "create:session",
+        "read:session",
+        "update:user",
+        "read:status",
+      ]);
     });
 
     test("With valid activation token", async () => {

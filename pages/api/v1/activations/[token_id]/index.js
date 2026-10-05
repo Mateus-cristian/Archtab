@@ -12,14 +12,8 @@ async function patchHandler(request, response) {
   const activationTokenId = request.query.token_id;
   const userTryingToPatch = request.context.user;
 
-  const validActivationToken =
-    await activation.findOneValidByToken(activationTokenId);
-
-  await activation.activateUserByUserId(validActivationToken.user_id);
-
-  const usedActivationToken = await activation.markTokenAsUsed(
-    validActivationToken.id,
-  );
+  const usedActivationToken =
+    await activation.activateUserAndMarkTokenAsUsed(activationTokenId);
 
   const securityOutputValues = authorization.filterOutput(
     userTryingToPatch,
