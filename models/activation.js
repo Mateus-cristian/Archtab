@@ -77,7 +77,7 @@ async function sendEmailToUser(user, activationToken) {
     subject: "Ative seu cadastro no Archtab!",
     text: `${user.username}, clique no link para ativar seu cadastro:
     
-${webserver.origin}/cadastro/ativar/${activationToken.id}...
+${webserver.origin}/cadastro/ativar/${activationToken.id}
 
 Atenciosamente,
 Equipe Archtab
